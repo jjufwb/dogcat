@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>펫트립 (PetTrip) - 전국 반려동물 동반 여행 정보</title>
+  <!-- Google Fonts & Font Awesome Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Header -->
+  <header class="header">
+    <div class="header-container">
+      <div class="logo-area">
+        <span class="logo-icon"><i class="fa-solid fa-paw"></i></span>
+        <div>
+          <h1 class="logo-title">펫트립 <span>PetTrip</span></h1>
+          <p class="logo-subtitle">반려동물과 함께 떠나는 전국 방방곡곡 여행</p>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero-section">
+    <div class="hero-content">
+      <h2>우리 집 댕댕이와 함께 어디로 떠나볼까요? 🐾</h2>
+      <p>원하는 지역을 선택하면 반려동물 동반 가능 여행지 정보를 카드 형태로 확인할 수 있습니다.</p>
+    </div>
+  </section>
+
+  <!-- Main Content Area -->
+  <main class="main-container">
+    <!-- Region Filter Control Card -->
+    <section class="filter-card">
+      <div class="filter-group">
+        <!-- Area Selector Dropdown (sido) -->
+        <div class="control-item">
+          <label for="sidoSelect"><i class="fa-solid fa-location-dot"></i> 지역(시/도) 선택</label>
+          <div class="select-wrapper">
+            <select id="sidoSelect">
+              <option value="서울" selected>서울특별시</option>
+              <option value="경기">경기도</option>
+              <option value="강원">강원특별자치도</option>
+              <option value="제주">제주특별자치도</option>
+              <option value="인천">인천광역시</option>
+              <option value="부산">부산광역시</option>
+              <option value="대구">대구광역시</option>
+              <option value="대전">대전광역시</option>
+              <option value="광주">광주광역시</option>
+              <option value="울산">울산광역시</option>
+              <option value="세종">세종특별자치시</option>
+              <option value="충북">충청북도</option>
+              <option value="충남">충청남도</option>
+              <option value="전북">전북특별자치도</option>
+              <option value="전남">전라남도</option>
+              <option value="경북">경상북도</option>
+              <option value="경남">경상남도</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="control-item btn-item">
+          <button id="refreshBtn" class="btn btn-primary">
+            <i class="fa-solid fa-magnifying-glass"></i> 여행 정보 확인하기
+          </button>
+        </div>
+      </div>
+
+      <!-- Status Bar -->
+      <div class="status-bar">
+        <div class="status-left">
+          <span id="currentSidoBadge" class="badge badge-accent">서울특별시</span>
+          <span class="result-count">반려동물 동반 여행 정보</span>
+        </div>
+        <div class="status-right">
+          <span id="endpointInfo" class="api-status-tag"><i class="fa-solid fa-server"></i> /api/dust?sido=서울 연동 중</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Cards Grid Section -->
+    <section class="cards-section">
+      <!-- Loading Indicator -->
+      <div id="loadingIndicator" class="loading-container hidden">
+        <div class="spinner"></div>
+        <p>반려동물 여행 정보를 불러오는 중입니다...</p>
+      </div>
+
+      <!-- Error State Card -->
+      <div id="errorState" class="error-state hidden">
+        <i class="fa-solid fa-triangle-exclamation error-icon"></i>
+        <h3 id="errorMessage">인증키 또는 요청값을 확인해주세요</h3>
+        <p id="errorSubMessage">서버 환경변수 DOGCAT_KEY 및 공공데이터포털 설정을 확인해주세요.</p>
+      </div>
+
+      <!-- Empty State -->
+      <div id="emptyState" class="empty-state hidden">
+        <i class="fa-solid fa-dog empty-icon"></i>
+        <h3>등록된 반려동물 여행 정보가 없습니다</h3>
+        <p>다른 지역을 선택해 보세요.</p>
+      </div>
+
+      <!-- Card Grid -->
+      <div id="cardGrid" class="card-grid">
+        <!-- script.js에서 동적으로 생성됩니다 -->
+      </div>
+    </section>
+  </main>
+
+  <!-- Pet Tour Detail Modal -->
+  <div id="detailModal" class="modal-overlay hidden">
+    <div class="modal-card">
+      <button id="modalCloseBtn" class="modal-close" aria-label="닫기">&times;</button>
+      <div class="modal-header">
+        <div class="modal-title-wrap">
+          <span class="badge badge-accent">반려동물 동반 가능</span>
+          <h2 id="modalTitle">여행지 이름</h2>
+        </div>
+        <p id="modalAddress" class="modal-address"><i class="fa-solid fa-location-dot"></i> 주소 정보</p>
+      </div>
+      <div class="modal-body">
+        <div class="modal-img-wrap">
+          <img id="modalImage" src="" alt="여행지 이미지">
+        </div>
+
+        <div class="pet-info-box">
+          <h3 class="pet-box-title"><i class="fa-solid fa-paw"></i> 반려동물 동반 상세 정보</h3>
+          <div id="petInfoContent" class="pet-info-grid">
+            <!-- 동적 렌더링 -->
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button id="modalConfirmBtn" class="btn btn-primary">확인</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-container">
+      <p class="copyright">© PetTrip. 전국 반려동물 동반 여행 정보 서비스.</p>
+      <p class="endpoints-sub">Vercel Serverless Function & 한국관광공사 공공데이터 연계</p>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

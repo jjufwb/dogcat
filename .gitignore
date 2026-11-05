@@ -1,0 +1,16 @@
+# 환경변수 파일 (Vercel 배포 시 Vercel 대시보드의 Environment Variables에 등록)
+.env.local
+.env
+.env.*
+
+# 의존성 및 빌드 파일
+node_modules/
+.vercel
+dist/
+build/
+
+# OS 및 에디터 임시 파일
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
